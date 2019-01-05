@@ -33,12 +33,13 @@ class Wizard
       @wizard.append_step('forum-title') do |step|
         step.add_field(id: 'title', type: 'text', required: true, value: SiteSetting.title)
         step.add_field(id: 'site_description', type: 'text', required: true, value: SiteSetting.site_description)
+        step.add_field(id: 'short_site_description', type: 'text', required: false, value: SiteSetting.short_site_description)
 
         step.on_update do |updater|
           updater.ensure_changed(:title)
 
           if updater.errors.blank?
-            updater.apply_settings(:title, :site_description)
+            updater.apply_settings(:title, :site_description, :short_site_description)
           end
         end
       end
@@ -48,6 +49,7 @@ class Wizard
 
         if @wizard.completed_steps?('introduction') && !introduction.get_summary
           step.disabled = true
+          step.description_vars = { topic_title: I18n.t("discourse_welcome_topic.title") }
         else
           step.add_field(id: 'welcome', type: 'textarea', required: true, value: introduction.get_summary)
 
@@ -92,31 +94,29 @@ class Wizard
         contact.add_choice(Discourse.system_user.username)
 
         step.on_update do |updater|
+          update_tos do |raw|
+            replace_company(updater, raw, 'contact_email')
+          end
+
           updater.apply_settings(:contact_email, :contact_url)
           updater.update_setting(:site_contact_username, updater.fields[:site_contact])
         end
       end
 
       @wizard.append_step('corporate') do |step|
-        step.add_field(id: 'company_short_name', type: 'text', value: SiteSetting.company_short_name)
-        step.add_field(id: 'company_full_name', type: 'text', value: SiteSetting.company_full_name)
-        step.add_field(id: 'company_domain', type: 'text', value: SiteSetting.company_domain)
+        step.description_vars = { base_path: Discourse.base_path }
+        step.add_field(id: 'company_name', type: 'text', value: SiteSetting.company_name)
+        step.add_field(id: 'governing_law', type: 'text', value: SiteSetting.governing_law)
+        step.add_field(id: 'city_for_disputes', type: 'text', value: SiteSetting.city_for_disputes)
 
         step.on_update do |updater|
-
-          tos_post = Post.where(topic_id: SiteSetting.tos_topic_id, post_number: 1).first
-          if tos_post.present?
-            raw = tos_post.raw.dup
-
-            replace_company(updater, raw, 'company_full_name')
-            replace_company(updater, raw, 'company_short_name')
-            replace_company(updater, raw, 'company_domain')
-
-            revisor = PostRevisor.new(tos_post)
-            revisor.revise!(@wizard.user, raw: raw)
+          update_tos do |raw|
+            replace_company(updater, raw, 'company_name')
+            replace_company(updater, raw, 'governing_law')
+            replace_company(updater, raw, 'city_for_disputes')
           end
 
-          updater.apply_settings(:company_short_name, :company_full_name, :company_domain)
+          updater.apply_settings(:company_name, :governing_law, :city_for_disputes)
         end
       end
 
@@ -157,8 +157,8 @@ class Wizard
       end
 
       @wizard.append_step('icons') do |step|
-        step.add_field(id: 'favicon', type: 'image', value: SiteSetting.favicon)
-        step.add_field(id: 'apple_touch_icon', type: 'image', value: SiteSetting.apple_touch_icon)
+        step.add_field(id: 'favicon', type: 'image', value: SiteSetting.site_favicon_url)
+        step.add_field(id: 'apple_touch_icon', type: 'image', value: SiteSetting.site_apple_touch_icon_url)
 
         step.on_update do |updater|
           updater.apply_settings(:favicon)
@@ -227,8 +227,9 @@ class Wizard
             "<img src='#{Discourse.base_uri}/images/emoji/#{set[:value]}/#{e}.png'>"
           end
 
-          sets.add_choice(set[:value],             label: I18n.t("js.#{set[:name]}"),
-                                                   extra_label: "<span class='emoji-preview'>#{imgs.join}</span>")
+          sets.add_choice(set[:value],
+                          label: I18n.t("js.#{set[:name]}"),
+                          extra_label: "<span class='emoji-preview'>#{imgs.join}</span>")
 
           step.on_update do |updater|
             updater.apply_settings(:emoji_set)
@@ -265,11 +266,12 @@ class Wizard
 
       @wizard.append_step('finished') do |step|
         step.banner = "finished.png"
+        step.description_vars = { base_path: Discourse.base_path }
       end
       @wizard
     end
 
-  protected
+    protected
 
     def replace_company(updater, raw, field_name)
       old_value = SiteSetting.send(field_name)
@@ -283,6 +285,19 @@ class Wizard
 
     def reserved_usernames
       @reserved_usernames ||= SiteSetting.defaults[:reserved_usernames].split('|')
+    end
+
+    def update_tos
+      tos_post = Post.find_by(topic_id: SiteSetting.tos_topic_id, post_number: 1)
+
+      if tos_post.present?
+        raw = tos_post.raw.dup
+
+        yield(raw)
+
+        revisor = PostRevisor.new(tos_post)
+        revisor.revise!(@wizard.user, raw: raw)
+      end
     end
   end
 end

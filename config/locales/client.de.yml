@@ -218,6 +218,8 @@ de:
     character_count:
       one: "{{count}} Zeichen"
       other: "{{count}} Zeichen"
+    related_messages:
+      title: "Verwandte Nachrichten"
     suggested_topics:
       title: "Vorgeschlagene Themen"
       pm_title: "Vorgeschlagene Nachrichten"
@@ -289,7 +291,6 @@ de:
     choose_topic:
       none_found: "Keine Themen gefunden."
       title:
-        search: "Suche nach Thema anhand von Name, URL oder ID:"
         placeholder: "Gib hier den Titel des Themas ein"
     queue:
       topic: "Thema:"
@@ -465,7 +466,6 @@ de:
           description: "Du wirst über jeden neuen Beitrag in jeder Nachricht benachrichtigt und die Anzahl neuer Antworten wird angezeigt."
         watching_first_post:
           title: "Ersten Beitrag beobachten"
-          description: "Du erhältst nur eine Benachrichtigung für den ersten Beitrag in jedem neuen Thema in dieser Gruppe."
         tracking:
           title: "Verfolgen"
           description: "Du wirst benachrichtigt, wenn jemand deinen @Namen erwähnt oder auf deinen Beitrag antwortet, und die Anzahl neuer Antworten wird angezeigt."
@@ -477,6 +477,7 @@ de:
           description: "Du erhältst keine Benachrichtigungen über neue Themen in dieser Gruppe."
       flair_url: "Avatar-Hintergrund"
       flair_url_placeholder: "(Optional) Bild-URL oder Font Awesome-Klasse"
+      flair_url_description: "Verwende quadratische Bilder, die nicht kleiner als 20x20 Pixel sind oder FontAwesome-Icons (akzeptierte Formate: \"fa-icon\", \"far fa-icon\" oder \"fab fa-icon\")."
       flair_bg_color: "Avatar-Hintergrundfarbe"
       flair_bg_color_placeholder: "(Optional) Hex-Farbwert"
       flair_color: "Avatar-Hintergrundfarbe"
@@ -518,9 +519,12 @@ de:
       topic_sentence:
         one: "1 Thema"
         other: "%{count} Themen"
-      topic_stat_sentence:
-        one: "%{count} neues Thema seit 1 %{unit}."
-        other: "%{count} neue Themen seit 1 %{unit}."
+      topic_stat_sentence_week:
+        one: "%{count} neues Thema in der letzten Woche."
+        other: "%{count} neue Themen in der letzten Woche."
+      topic_stat_sentence_month:
+        one: "%{count} neues Thema im letzten Monat."
+        other: "%{count} neue Themen im letzten Monat."
       n_more: "Kategorien (%{count} weitere) ..."
     ip_lookup:
       title: IP-Adressen-Abfrage
@@ -1230,6 +1234,7 @@ de:
       saved_local_draft_tip: "lokal gespeichert"
       similar_topics: "Dein Thema hat Ähnlichkeit mit…"
       drafts_offline: "Entwürfe offline"
+      edit_conflict: 'Konflikt bearbeiten'
       group_mentioned_limit: "<b>Warnung!</b> Du erwähnst <a href='{{group_link}}'>{{group}}</a>, aber diese Gruppe hat mehr Mitglieder als der Administrator als die maximale Anzahl von {{max}} Benutzern eingestellt hat, die gleichzeitig erwähnt werden können. Keiner davon wird benachrichtigt."
       group_mentioned:
         one: "Indem du {{group}} erwähnst, bist du dabei, <a href='{{group_link}}'>eine Person</a> zu benachrichtigen – bist du dir sicher?"
@@ -1244,7 +1249,7 @@ de:
         title_too_long: "Titel darf maximal {{max}} Zeichen lang sein"
         post_missing: "Beitrag darf nicht leer sein"
         post_length: "Beitrag muss mindestens {{min}} Zeichen lang sein"
-        try_like: 'Hast du schon die <i class="fa fa-heart"></i> Schaltfläche ausprobiert?'
+        try_like: "Hast du schon die {{heart}}-Schaltfläche ausprobiert?"
         category_missing: "Du musst eine Kategorie auswählen"
         tags_missing: "Du musst mindestens %{count} Schlagwörter wählen."
       save_edit: "Speichern"
@@ -1811,7 +1816,6 @@ de:
       split_topic:
         title: "In neues Thema verschieben"
         action: "in ein neues Thema verschieben"
-        topic_name: "Bezeichnung des neuen Themas"
         error: "Beim Verschieben der Beiträge ins neue Thema ist ein Fehler aufgetreten."
         instructions:
           one: "Du bist dabei, ein neues Thema zu erstellen und den ausgewählten Beitrag dorthin zu verschieben."
@@ -1865,7 +1869,6 @@ de:
           other: "Du hast <b>{{count}}</b> Beiträge ausgewählt."
     post:
       quote_reply: "Zitat"
-      edit: "<i class='fa fa-pencil'></i> {{link}} {{replyAvatar}} {{username}}"
       edit_reason: "Grund: "
       post_number: "Beitrag {{number}}"
       wiki_last_edited_on: "Wiki zuletzt bearbeitet am"
@@ -2052,7 +2055,7 @@ de:
           revert: "Diese Überarbeitung wiederherstellen"
           edit_wiki: "Bearbeite Wiki"
           edit_post: "Bearbeite Beitrag"
-          comparing_previous_to_current_out_of_total: "<strong>{{previous}}</strong> <i class='fa fa-arrows-h'></i> <strong>{{current}}</strong> / {{total}}"
+          comparing_previous_to_current_out_of_total: "<strong>{{previous}}</strong> {{icon}} <strong>{{current}}</strong> / {{total}}"
         displays:
           inline:
             title: "Zeige die Änderungen inline an"
@@ -2152,7 +2155,6 @@ de:
           description: "Du wirst automatisch alle neuen Themen in diesen Kategorien beobachten. Du wirst über alle neuen Beiträge in allen Themen benachrichtigt und die Anzahl der neuen Antworten wird angezeigt."
         watching_first_post:
           title: "Ersten Beitrag beobachten"
-          description: "Du erhältst eine Benachrichtigung nur für den ersten Beitrag in jedem neuen Thema in diesen Kategorien."
         tracking:
           title: "Verfolgen"
           description: "Du wirst automatisch alle neuen Themen in diesen Kategorien verfolgen. Du wirst benachrichtigt, wenn jemand deinen @name erwähnt oder dir antwortet, und die Anzahl der neuen Antworten wird angezeigt."
@@ -2480,9 +2482,18 @@ de:
       manage_groups: "Schlagwort-Gruppen verwalten"
       manage_groups_description: "Gruppen definieren, um Schlagwörter zu organisieren"
       upload: "Schlagwärter hochladen"
-      upload_description: "Lade eine Textdatei hoch, um mehrere Schlagwörter auf einmal zu erstellen"
+      upload_description: "Lade eine CSV-Datei hoch, um mehrere Schlagwörter auf einmal zu erstellen"
       upload_instructions: "Eine pro Zeile, optional mit einer Schlagwortgruppe nach dem Schema 'schlagwort_name,schlagwort_gruppe'."
       upload_successful: "Schlagwörter erfolgreich hochgeladen"
+      delete_unused_confirmation:
+        one: "%{count} Schlagwort wird gelöscht: %{tags}"
+        other: "%{count} Schlagwörter werden gelöscht: %{tags}"
+      delete_unused_confirmation_more_tags:
+        one: "%{tags} und%{count} weiteres"
+        other: "%{tags} und %{count} weitere"
+      delete_unused: "Nicht verwendete Schlagwörter löschen"
+      delete_unused_description: "Alle Schlagwörter löschen, die keinem Thema und keiner Nachricht zugewiesen sind."
+      cancel_delete_unused: "Abbrechen"
       filters:
         without_category: "%{filter} %{tag} Themen"
         with_category: "%{filter} %{tag} Themen in %{category}"
@@ -2494,7 +2505,6 @@ de:
           description: "Du wirst automatisch alle Themen mit diesem Schlagwort beobachten. Du wirst über alle neuen Beiträge und Themen benachrichtigt werden. Außerdem wird die Anzahl der ungelesenen und neuen Beiträge neben dem Thema erscheinen."
         watching_first_post:
           title: "Ersten Beitrag beobachten"
-          description: "Du erhältst nur eine Benachrichtigung für den ersten Beitrag in jedem neuen Thema mit diesem Schlagwort."
         tracking:
           title: "Verfolgen"
           description: "Du wirst automatisch allen Themen mit diesem Schlagwort folgen. Die Anzahl der ungelesenen und neuen Beiträge wird neben dem Thema erscheinen."
@@ -2582,9 +2592,6 @@ de:
         private_messages_short: "Nachr."
         private_messages_title: "Nachrichten"
         mobile_title: "Mobilgerät"
-        space_free: "{{size}} frei"
-        uploads: "Uploads"
-        backups: "Backups"
         lastest_backup: "Letztes: %{date}"
         traffic_short: "Traffic"
         traffic: "Web Requests der Applikation"
@@ -2602,6 +2609,7 @@ de:
         timeout_error: "Entschuldige bitte, die Warteschlange ist zu lang, bitte wähle ein kürzeres Intervall"
         exception_error: "Entschuldige, ein Fehler während der Ausführung des Query ist aufgetreten"
         too_many_requests: Du hast diese Aktion zu oft ausgeführt. Bitte warte bevor Du es erneut probierst.
+        not_found_error: "Entschuldige bitte, dieser Bericht existiert nicht"
         reports:
           trend_title: "%{percent} Veränderung. Aktuell %{current}, war %{prev} in vorherigem Zeitraum."
           today: "Heute"
@@ -2940,7 +2948,6 @@ de:
             title: "Die Datenbank auf den letzten funktionierenden Zustand zurücksetzen"
             confirm: "Möchtest du wirklich die Datenbank auf den letzten funktionierenden Stand zurücksetzen?"
         location:
-          local: "Lokal"
           s3: "Amazon S3"
       export_csv:
         success: "Der Export wurde gestartet. Du erhältst eine Nachricht, sobald der Vorgang abgeschlossen ist."
@@ -3205,6 +3212,7 @@ de:
           silence_user: "Benutzer stummgeschaltet"
           delete_post: "Beitrag gelöscht"
           delete_topic: "Thema gelöscht"
+          post_approved: "Beitrag genehmigt"
       logs:
         title: "Logs"
         action: "Aktion"
@@ -3273,6 +3281,7 @@ de:
             revoke_moderation: "Moderation entziehen"
             backup_create: "Backup erstellen"
             deleted_tag: "Schlagwort gelöscht"
+            deleted_unused_tags: "nicht verwendete Schlagwörter gelöscht"
             renamed_tag: "Schlagwort umbenannt"
             revoke_email: "E-Mail widerrufen"
             lock_trust_level: "Vertrauensstufe sperren"
@@ -3297,6 +3306,7 @@ de:
             delete_badge: "Abzeichen löschen"
             merge_user: "Benutzer zusammenführen"
             entity_export: "Entität exportieren"
+            change_name: "Theme wechseln"
         screened_emails:
           title: "Gefilterte E-Mails"
           description: "Wenn jemand ein Konto erstellt, werden die folgenden E-Mail-Adressen überprüft und es wird die Anmeldung blockiert oder eine andere Aktion ausgeführt."
@@ -3331,9 +3341,6 @@ de:
           title: "Suchprotokolle"
           term: "Suchbegriff"
           searches: "Suchen"
-          click_through: "Durchklicken"
-          unique: "Eindeutig"
-          unique_title: "einzelne Benutzer mit dieser Suche"
           types:
             all_search_types: "Alle Sucharten"
             header: "Überschrift"
@@ -3804,6 +3811,7 @@ de:
   wizard_js:
     wizard:
       done: "Erledigt"
+      finish: "Fertig"
       back: "Zurück"
       next: "Nächstes"
       step: "%{current} von %{total}"

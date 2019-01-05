@@ -93,7 +93,6 @@ nb_NO:
         '8': "Utsiktene er gode"
         '9': "Ja"
         '10': "Ting taler i favør av ja"
-        '11': "Vagt svar, prøv igjen"
         '12': "Spør igjen senere"
         '13': "Best å ikke fortelle deg det nå"
         '14': "Kan ikke spå nå"
@@ -141,8 +140,6 @@ nb_NO:
     new_user_narrative:
       reset_trigger: "ny bruker"
       cert_title: "Som bevis for vellykket gjennomføring av introduksjonen for nye brukere"
-      hello:
-        title: ":robot: Heisann!"
       onebox:
         instructions: |-
           Neste steg, kan du dele en av disse lenkene med meg? Svar med **en frittstående lenke på en ny linje**, da vil den automatisk utvides til å inkludere et stilig sammendrag.

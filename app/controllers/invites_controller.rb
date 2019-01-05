@@ -19,16 +19,21 @@ class InvitesController < ApplicationController
 
     invite = Invite.find_by(invite_key: params[:id])
 
-    if invite.present? && !invite.redeemed?
-      store_preloaded("invite_info", MultiJson.dump(
-        invited_by: UserNameSerializer.new(invite.invited_by, scope: guardian, root: false),
-        email: invite.email,
-        username: UserNameSuggester.suggest(invite.email))
-      )
+    if invite.present?
+      if !invite.redeemed?
+        store_preloaded("invite_info", MultiJson.dump(
+          invited_by: UserNameSerializer.new(invite.invited_by, scope: guardian, root: false),
+          email: invite.email,
+          username: UserNameSuggester.suggest(invite.email))
+        )
 
-      render layout: 'application'
+        render layout: 'application'
+      else
+        flash.now[:error] = I18n.t('invite.not_found_template', site_name: SiteSetting.title, base_url: Discourse.base_url)
+        render layout: 'no_ember'
+      end
     else
-      flash.now[:error] = I18n.t('invite.not_found_template', site_name: SiteSetting.title, base_url: Discourse.base_url)
+      flash.now[:error] = I18n.t('invite.not_found')
       render layout: 'no_ember'
     end
   end
@@ -211,12 +216,21 @@ class InvitesController < ApplicationController
 
   def post_process_invite(user)
     user.enqueue_welcome_message('welcome_invite') if user.send_welcome_message
+
     if user.has_password?
-      email_token = user.email_tokens.create(email: user.email)
-      Jobs.enqueue(:critical_user_email, type: :signup, user_id: user.id, email_token: email_token.token)
+      send_activation_email(user) unless user.active
     elsif !SiteSetting.enable_sso && SiteSetting.enable_local_logins
       Jobs.enqueue(:invite_password_instructions_email, username: user.username)
     end
   end
 
+  def send_activation_email(user)
+    email_token = user.email_tokens.create!(email: user.email)
+
+    Jobs.enqueue(:critical_user_email,
+                 type: :signup,
+                 user_id: user.id,
+                 email_token: email_token.token
+    )
+  end
 end

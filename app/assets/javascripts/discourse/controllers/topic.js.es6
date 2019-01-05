@@ -305,7 +305,7 @@ export default Ember.Controller.extend(BufferedContent, {
       const postStream = this.get("model.postStream");
       const firstLoadedPost = postStream.get("posts.firstObject");
 
-      if (post.get("post_number") === 1) {
+      if (post.get && post.get("post_number") === 1) {
         return;
       }
 
@@ -1110,22 +1110,6 @@ export default Ember.Controller.extend(BufferedContent, {
     return (
       selectedPostsCount > 0 &&
       ((selectedAllPosts && isStaff) || selectedPosts.every(p => p.can_delete))
-    );
-  },
-
-  @computed(
-    "canMergeTopic",
-    "selectedAllPosts",
-    "selectedPosts",
-    "selectedPosts.[]"
-  )
-  canSplitTopic(canMergeTopic, selectedAllPosts, selectedPosts) {
-    return (
-      canMergeTopic &&
-      !selectedAllPosts &&
-      selectedPosts.length > 0 &&
-      selectedPosts.sort((a, b) => a.post_number - b.post_number)[0]
-        .post_type === 1
     );
   },
 

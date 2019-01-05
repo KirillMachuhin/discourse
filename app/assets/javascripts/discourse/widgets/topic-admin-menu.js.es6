@@ -196,7 +196,7 @@ export default createWidget("topic-admin-menu", {
         className: "topic-admin-pin",
         buttonClass: "btn-default",
         action: "showFeatureTopic",
-        icon: "thumb-tack",
+        icon: "thumbtack",
         label: featured ? "actions.unpin" : "actions.pin"
       });
     }
@@ -211,15 +211,13 @@ export default createWidget("topic-admin-menu", {
       });
     }
 
-    if (this.currentUser.get("staff")) {
-      buttons.push({
-        className: "topic-admin-reset-bump-date",
-        buttonClass: "btn-default",
-        action: "resetBumpDate",
-        icon: "anchor",
-        label: "actions.reset_bump_date"
-      });
-    }
+    buttons.push({
+      className: "topic-admin-reset-bump-date",
+      buttonClass: "btn-default",
+      action: "resetBumpDate",
+      icon: "anchor",
+      label: "actions.reset_bump_date"
+    });
 
     if (!isPrivateMessage) {
       buttons.push({

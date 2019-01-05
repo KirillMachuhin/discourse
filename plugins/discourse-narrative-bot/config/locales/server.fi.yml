@@ -94,7 +94,6 @@ fi:
         '8': "Siltä näyttäisi"
         '9': "Kyllä"
         '10': "Merkit viittaavat siihen suuntaan"
-        '11': "Näky epäselvä, yritä uudelleen"
         '12': "Palaa myöhemmin asiaan"
         '13': "Parempi, etten kerro vielä"
         '14': "En pysty sanomaan juuri nyt"
@@ -142,8 +141,6 @@ fi:
     new_user_narrative:
       reset_trigger: "peruskurssi"
       cert_title: "Tunnustuksena palstan käytön peruskurssin menestyksekkäästä suorittamisesta"
-      hello:
-        title: ":robot: Tervehdys!"
       onebox:
         instructions: |-
           Voisitko nyt jakaa jonkun seuraavista linkeistä minulle? Laita vastaukseesi **linkin osoite yksin omalle rivilleen**, jolloin siitä muotoillaan automaattisesti kätevä tiivistelmälaatikko.

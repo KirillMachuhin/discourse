@@ -262,6 +262,8 @@ cs:
       few: "{{count}} znaky"
       many: "{{count}} znaků"
       other: "{{count}} znaků"
+    related_messages:
+      title: "Související zprávy"
     suggested_topics:
       title: "Doporučená témata"
       pm_title: "Doporučené zprávy"
@@ -339,7 +341,6 @@ cs:
     choose_topic:
       none_found: "Žádná témata nenalezena."
       title:
-        search: "Hledat téma podle názvu, URL nebo ID:"
         placeholder: "sem napište název tématu"
     queue:
       topic: "Téma:"
@@ -523,7 +524,6 @@ cs:
           description: "Budete informováni o každém novém příspěvku v každné zprávě a také se vám zobrazí počet nepřečtených příspěvků."
         watching_first_post:
           title: "Hlídané první příspěvky"
-          description: "Budete informováni o prvním novém příspěvku v každém novém tématu vytvořeném v této skupině."
         tracking:
           title: "Sledování"
           description: "Budete informováni pokud někdo zmíní vaše @jméno nebo odpoví na váš příspěvek a zobrazí se vám počet nových odpovědí."
@@ -578,11 +578,6 @@ cs:
         few: "%{count} témata"
         many: "%{count} témat"
         other: "%{count} témat"
-      topic_stat_sentence:
-        one: "%{count} nové téma za posledních %{unit}."
-        few: "%{count} nová témata za posledních %{unit}."
-        many: "%{count} nových témat za posledních %{unit}."
-        other: "%{count} nových témat za posledních %{unit}."
       n_more: "Kategorie (a další %{count})..."
     ip_lookup:
       title: Vyhledávání podle IP adresy
@@ -1332,7 +1327,6 @@ cs:
         title_too_long: "Název nemůže být delší než {{max}} znaků"
         post_missing: "Příspěvek nemůže být prázdný"
         post_length: "Příspěvek musí být alespoň {{min}} znaků dlouhý"
-        try_like: 'Zkusili jste tlačítko <i class="fa fa-heart"></i>?'
         category_missing: "Musíte vybrat kategorii"
         tags_missing: "Vybraných tagů musí být nejméně {{count}}"
       save_edit: "Uložit změnu"
@@ -1830,7 +1824,7 @@ cs:
         delete: "Odstranit téma"
         open: "Otevřít téma"
         close: "Zavřít téma"
-        multi_select: "Zvolte příspěvky…"
+        multi_select: "Vybrat příspěvky…"
         timed_update: "Nastavit časovač tématu..."
         pin: "Připevnit téma"
         unpin: "Odstranit připevnění"
@@ -1932,8 +1926,7 @@ cs:
         cancel: "Zrušit filtr"
       split_topic:
         title: "Rozdělit téma"
-        action: "do nového téma"
-        topic_name: "Název nového tématu:"
+        action: "do nového tématu"
         error: "Bohužel nastala chyba při rozdělování tématu."
         instructions:
           one: "Chystáte se vytvořit nové téma a naplnit ho příspěvkem, který jste označili."
@@ -1955,7 +1948,7 @@ cs:
         error: "Během slučování vybraných příspěvků došlo k chybě."
       change_owner:
         title: "Změnit vlastníka"
-        action: "změna autora"
+        action: "změnit autora"
         error: "Chyba při měnění autora u příspevků."
         placeholder: "uživatelské jméno nového autora"
         instructions:
@@ -1973,7 +1966,7 @@ cs:
         select: 'vybrat'
         selected: 'vybráno ({{count}})'
         select_post:
-          label: 'označit'
+          label: 'vybrat'
           title: 'Přidat příspěvek do výběru'
         selected_post:
           label: 'vybrané'
@@ -1986,7 +1979,7 @@ cs:
           title: 'Přidat příspěvek a vše po něm do výběru'
         delete: smazat označené
         cancel: zrušit označování
-        select_all: vybrat vše
+        select_all: vybrat všechny
         deselect_all: zrušit výběr
         description:
           one: Máte označen <b>1</b> příspěvek.
@@ -1995,14 +1988,13 @@ cs:
           other: "Máte označeno <b>{{count}}</b> příspěvků."
     post:
       quote_reply: "Cituj"
-      edit: "<i class='fa fa-pencil'></i>{{link}} {{replyAvatar}} {{username}}"
       edit_reason: "Důvod: "
       post_number: "příspěvek č. {{number}}"
       wiki_last_edited_on: "wiki naposledy upravena"
       last_edited_on: "příspěvek naposledy upraven"
       reply_as_new_topic: "Odpovědět v propojeném tématu"
       reply_as_new_private_message: "Odpověď poslat jako zprávu stejným příjemcům. "
-      continue_discussion: "Pokračující diskuze z {{postLink}}:"
+      continue_discussion: "Pokračování diskuze z {{postLink}}:"
       follow_quote: "přejít na citovaný příspěvek"
       show_full: "Zobrazit celý příspěvek"
       show_hidden: 'Zobraz skrytý obsah.'
@@ -2090,13 +2082,13 @@ cs:
             other: "Ano a dalších {{count}} odpovědí"
           just_the_post: "Ne, pouze tento příspěvek"
         admin: "post admin actions"
-        wiki: "Vytvořte Wiki"
-        unwiki: "Odtraňte Wiki"
-        convert_to_moderator: "Přidejte redakční barvu"
-        revert_to_regular: "Odstraňte redakční barvu"
+        wiki: "Převést na wiki"
+        unwiki: "Odstranit Wiki"
+        convert_to_moderator: "Zvýraznit barevně"
+        revert_to_regular: "Zrušit zvýraznění"
         rebake: "Obnovit HTML"
         unhide: "Odkrýt"
-        change_owner: "Změna autora"
+        change_owner: "Změnit autora"
         grant_badge: "Udělit odznak"
         lock_post: "Uzamknout příspěvek "
         lock_post_description: "Zabránit přispěvatelům v úpravách tohoto příspěvku"
@@ -2233,7 +2225,6 @@ cs:
           revert: "Vrátit se k této revizi"
           edit_wiki: "Upravit Wiki"
           edit_post: "upravit příspěvek"
-          comparing_previous_to_current_out_of_total: "<strong>{{previous}}</strong> <i class='fa fa-arrows-h'></i> <strong>{{current}}</strong> / {{total}}"
         displays:
           inline:
             title: "Vykreslený příspěvek se změnami zobrazenými v textu"
@@ -2333,7 +2324,6 @@ cs:
           description: "Budete automaticky sledovat všechna témata v těchto kategoriích. Budete upozorněni na každý nový příspěvek v každém tématu a zobrazí se počet nových odpovědí."
         watching_first_post:
           title: "Hlídání prvního příspěvku"
-          description: "Budete informováni o prvním novém příspěvku v každém novém tématu vytvořeném v těchto kategoriích."
         tracking:
           title: "Sledování"
           description: "Budete automaticky sledovat všechna nová témata v těchto kategoriích. Budete upozorněni, pokud někdo zmíní vaše @jméno nebo vám odpoví, a zobrazí se počet nových odpovědí."
@@ -2705,7 +2695,6 @@ cs:
       manage_groups: "Spravovat skupiny štítků"
       manage_groups_description: "Definice skupin pro organizaci štítků"
       upload: "Nahrát tagy"
-      upload_description: "Vytvořit mnoho tagů naráz pomocí nahraného textového souboru"
       upload_instructions: "Jeden na řádek, případně se skupinou tagů ve formátu 'jméno_tagu,skupina_tagu'."
       upload_successful: "Tagy úspěšně nahrány"
       filters:
@@ -2719,7 +2708,6 @@ cs:
           description: "Budete automaticky sledovat všechna nová témata s těmito štítky. Na všechny nové příspěvky a témata budete upozorněni. Počet nových příspěvků se zobrazí vedle tématu."
         watching_first_post:
           title: "Hlídané první příspěvky"
-          description: "Budete upozorněni na první příspěvek v každém novém tématu s tímto tagem."
         tracking:
           title: "Sledování"
           description: "Budete automaticky sledovat všechna témata s tímto tagem. Počet nepřečtených a nových příspěvků bude vidět vedle tématu."
@@ -2807,9 +2795,6 @@ cs:
         private_messages_short: "Zpráv"
         private_messages_title: "Zprávy"
         mobile_title: "Mobilní verze"
-        space_free: "{{size}} prázdné"
-        uploads: "Nahrané soubory"
-        backups: "zálohy"
         traffic_short: "Provoz"
         traffic: "Webové požadavky na aplikaci"
         page_views: "Zobrazení stránky "
@@ -3171,12 +3156,14 @@ cs:
           color_scheme_select: "Vybrat barvy motivu"
           custom_sections: "vlastí sekce:"
           theme_components: "Komponenty motivu"
+          collapse: Sbalit
           uploads: "nahrání"
           no_uploads: "Můžeš nahrát položku spojenou s tvým motivem jako jsou fonty a obrázky."
           add_upload: "Přidat nahrávání "
           upload_file_tip: "Vybrat položku k nahrání (png, woff2, etc...)"
           variable_name: "Název SCSS var:"
           upload: "Nahrát"
+          discard: "Zahodit"
           css_html: "Vlastí CSS/HTML"
           edit_css_html: "Upravit CSS/HTML"
           edit_css_html_help: "Neupravil jsi CSS nebo HTML"
@@ -3452,9 +3439,6 @@ cs:
           title: "Vyhledat přihlášení"
           term: "Období"
           searches: "Vyhledávání"
-          click_through: "kliknutí "
-          unique: "Unikátní"
-          unique_title: "Unikátní uživatel provádějící vyhledávání"
           types:
             all_search_types: "Vyhledávat všechny typy"
             header: "Hlavička"
@@ -3510,7 +3494,7 @@ cs:
           pending: "Čeká na schválení"
           staff: 'Redakce'
           suspended: 'Zakázaní'
-          silenced: 'Ztišený'
+          silenced: 'Ztišení'
           suspect: 'Podezřelí'
         approved: "Schválen?"
         approved_selected:
@@ -3535,7 +3519,7 @@ cs:
           staff: "Redakce"
           admins: 'Administrátoři'
           moderators: 'Moderátoři'
-          silenced: 'Ztišený úživatel'
+          silenced: 'Ztišení uživatelé'
           suspended: 'Zakázaní uživatelé'
           suspect: 'Podezřelí uživatelé'
         reject_successful:
@@ -3922,6 +3906,7 @@ cs:
   wizard_js:
     wizard:
       done: "Hotovo"
+      finish: "Dokončit"
       back: "Zpět"
       next: "Další"
       step: "%{current} z %{total}"

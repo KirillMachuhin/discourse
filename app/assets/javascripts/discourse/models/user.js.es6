@@ -446,7 +446,7 @@ const User = RestModel.extend({
   statsCountNonPM() {
     if (Ember.isEmpty(this.get("statsExcludingPms"))) return 0;
     let count = 0;
-    _.each(this.get("statsExcludingPms"), val => {
+    this.get("statsExcludingPms").forEach(val => {
       if (this.inAllStream(val)) {
         count += val.count;
       }
@@ -690,13 +690,13 @@ const User = RestModel.extend({
   availableTitles() {
     let titles = [];
 
-    _.each(this.get("groups"), group => {
+    (this.get("groups") || []).forEach(group => {
       if (group.get("title")) {
         titles.push(group.get("title"));
       }
     });
 
-    _.each(this.get("badges"), badge => {
+    (this.get("badges") || []).forEach(badge => {
       if (badge.get("allow_title")) {
         titles.push(badge.get("name"));
       }
@@ -716,6 +716,16 @@ User.reopenClass(Singleton, {
   // TODO: Use app.register and junk Singleton
   createCurrent() {
     const userJson = PreloadStore.get("currentUser");
+
+    if (userJson && userJson.primary_group_id) {
+      const primaryGroup = userJson.groups.find(
+        group => group.id === userJson.primary_group_id
+      );
+      if (primaryGroup) {
+        userJson.primary_group_name = primaryGroup.name;
+      }
+    }
+
     if (userJson) {
       const store = Discourse.__container__.lookup("service:store");
       return store.createRecord("user", userJson);

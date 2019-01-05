@@ -80,9 +80,6 @@ gl:
     loading: "Cargando a discusión..."
     permalink: "Ligazón permanente"
     in_reply_to: "▶ %{username}"
-    replies:
-      one: "Unha resposta"
-      other: "%{count} respostas"
   no_mentions_allowed: "Sentímolo pero non podes mencionar outros usuarios"
   invalid_characters: "contén caracteres incorrectos"
   next_page: "páxina seguinte →"
@@ -288,10 +285,6 @@ gl:
       title: "Marcadores"
       xaxis: "Día"
       yaxis: "Número de novos marcadores"
-    starred:
-      title: "Con estrela"
-      xaxis: "Día"
-      yaxis: "Número de novos temas con estrela"
     users_by_trust_level:
       title: "Usuarios por nivel de confianza"
       xaxis: "Nivel de confianza"

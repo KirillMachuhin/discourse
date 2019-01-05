@@ -62,7 +62,7 @@ const Report = Discourse.Model.extend({
       let d,
         sum = 0,
         count = 0;
-      _.each(this.data, datum => {
+      this.data.forEach(datum => {
         d = moment(datum.x);
         if (d >= earliestDate && d <= latestDate) {
           sum += datum.y;
@@ -272,12 +272,17 @@ const Report = Discourse.Model.extend({
           if (type === "seconds") return this._secondsLabel(value);
           if (type === "link") return this._linkLabel(label.properties, row);
           if (type === "percent") return this._percentLabel(value);
+          if (type === "bytes") return this._bytesLabel(value);
           if (type === "number") {
             return this._numberLabel(value, opts);
           }
           if (type === "date") {
-            const date = moment(value, "YYYY-MM-DD");
+            const date = moment(value);
             if (date.isValid()) return this._dateLabel(value, date);
+          }
+          if (type === "precise_date") {
+            const date = moment(value);
+            if (date.isValid()) return this._dateLabel(value, date, "LLL");
           }
           if (type === "text") return this._textLabel(value);
 
@@ -377,10 +382,17 @@ const Report = Discourse.Model.extend({
     };
   },
 
-  _dateLabel(value, date) {
+  _bytesLabel(value) {
     return {
       value,
-      formatedValue: value ? date.format("LL") : "—"
+      formatedValue: I18n.toHumanSize(value)
+    };
+  },
+
+  _dateLabel(value, date, format = "LL") {
+    return {
+      value,
+      formatedValue: value ? date.format(format) : "—"
     };
   },
 

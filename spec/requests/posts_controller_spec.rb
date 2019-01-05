@@ -243,6 +243,24 @@ describe PostsController do
           delete "/posts/destroy_many.json", params: { post_ids: [post1.id], reply_post_ids: [post1.id] }
         end
       end
+
+      context "deleting flagged posts" do
+        let(:moderator) { Fabricate(:moderator) }
+
+        before do
+          PostAction.act(moderator, post1, PostActionType.types[:off_topic])
+          PostAction.act(moderator, post2, PostActionType.types[:off_topic])
+          Jobs::SendSystemMessage.clear
+        end
+
+        it "defers the posts" do
+          sign_in(moderator)
+          expect(PostAction.flagged_posts_count).to eq(2)
+          delete "/posts/destroy_many.json", params: { post_ids: [post1.id, post2.id], defer_flags: true }
+          expect(Jobs::SendSystemMessage.jobs.size).to eq(0)
+          expect(PostAction.flagged_posts_count).to eq(0)
+        end
+      end
     end
   end
 
@@ -642,6 +660,15 @@ describe PostsController do
         sign_in(Fabricate(:moderator))
         put "/posts/#{post.id}/rebake.json"
         expect(response.status).to eq(200)
+      end
+
+      it "will invalidate broken images cache" do
+        sign_in(Fabricate(:moderator))
+        post.custom_fields[Post::BROKEN_IMAGES] = ["https://example.com/image.jpg"].to_json
+        post.save_custom_fields
+        put "/posts/#{post.id}/rebake.json"
+        post.reload
+        expect(post.custom_fields[Post::BROKEN_IMAGES]).to be_nil
       end
     end
   end
@@ -1133,10 +1160,18 @@ describe PostsController do
         include_examples "it works"
       end
 
+      context "TL4 users" do
+        before do
+          sign_in(Fabricate(:trust_level_4))
+        end
+
+        include_examples "it works"
+      end
+
       context "users" do
         let(:topic) { Fabricate(:topic) }
 
-        [:user, :trust_level_4].each do |user|
+        [:user].each do |user|
           it "will raise an error for #{user}" do
             sign_in(Fabricate(user))
             post "/posts.json", params: {

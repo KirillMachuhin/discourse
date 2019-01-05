@@ -235,7 +235,6 @@ id:
     choose_topic:
       none_found: "Tidak ada topik ditemukan."
       title:
-        search: "Cari Topik berdasarkan nama, url atau id:"
         placeholder: "tulis judul topik disini"
     queue:
       topic: "Topik:"
@@ -408,8 +407,6 @@ id:
       subcategories: "Subkategori"
       topic_sentence:
         other: "%{count} topik"
-      topic_stat_sentence:
-        other: "%{count} topik baru dalam %{unit} terakhir."
     ip_lookup:
       title: Pencarian Alamat IP
       hostname: nama host
@@ -823,7 +820,6 @@ id:
         title_too_long: "Judul tidak boleh lebih dari {{max}} karakter"
         post_missing: "Tulisan tidak boleh kosong"
         post_length: "Tulisan setidaknya harus {{min}} karakter"
-        try_like: 'Pernahkan anda mencoba tombol <i class="fa fa-heart"></i>?'
         category_missing: "Anda harus memilih kategori"
       save_edit: "Simpah Ubahan"
       reply_original: "Balas pada Topik Asal"
@@ -892,7 +888,6 @@ id:
       split_topic:
         title: "Pindahkan sebagai Topik Baru"
         action: "pindahkan sebagai topik baru"
-        topic_name: "Nama Topik Baru"
         error: "Ada kesalahan dalam memindahkan posting sebagai topik baru"
       change_owner:
         placeholder: "username pemilik yang baru"

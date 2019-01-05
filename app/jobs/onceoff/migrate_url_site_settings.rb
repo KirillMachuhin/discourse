@@ -40,13 +40,15 @@ module Jobs
               follow_redirect: true
             )
           rescue OpenURI::HTTPError,
+                 OpenSSL::SSL::SSLError,
                  Net::OpenTimeout,
                  Net::ReadTimeout,
                  Errno::ECONNREFUSED,
+                 EOFError,
                  SocketError,
                  Discourse::InvalidParameters => e
 
-            logger.info(
+            logger.warn(
               "Error encountered when trying to download file " +
               "for #{new_setting}.\n#{e.class}: #{e.message}\n#{e.backtrace.join("\n")}"
             )

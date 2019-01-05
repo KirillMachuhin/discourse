@@ -90,7 +90,6 @@ sw:
         '8': "Outlook iko vizuri"
         '9': "Ndio"
         '10': "Ishara inaonekana kuwa ndio"
-        '11': "Jibu halipo vizuri jaribu tena"
         '12': "Tafadhali, uliza tena baadae"
         '13': "Afadhali kutokukwambia kwa sasa"
         '14': "Haiwezi ikabashiri sasa hivi"
@@ -138,8 +137,6 @@ sw:
     new_user_narrative:
       reset_trigger: "mtumiaji mpya"
       cert_title: "Utambulisho wa kumaliza mafunzo ya mtumiaji mpya"
-      hello:
-        title: ":robot: Habari!"
       onebox:
         instructions: |-
           Baada ya hapo, je unaweza kunipa hivi viungo na mimi? Jibu na **kila kiungo kwenye mstari wake**, na itaongezeka kuonyesha muhtasari kuhusiana na hicho kiungo.

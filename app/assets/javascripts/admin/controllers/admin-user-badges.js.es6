@@ -1,4 +1,5 @@
 import GrantBadgeController from "discourse/mixins/grant-badge-controller";
+import { popupAjaxError } from "discourse/lib/ajax-error";
 
 export default Ember.Controller.extend(GrantBadgeController, {
   adminUser: Ember.inject.controller(),
@@ -15,18 +16,18 @@ export default Ember.Controller.extend(GrantBadgeController, {
     var grouped = _.groupBy(allBadges, badge => badge.badge_id);
 
     var expanded = [];
-    const expandedBadges = allBadges.get("expandedBadges");
+    const expandedBadges = allBadges.get("expandedBadges") || [];
 
     _(grouped).each(function(badges) {
       var lastGranted = badges[0].granted_at;
 
-      _.each(badges, function(badge) {
+      badges.forEach(badge => {
         lastGranted =
           lastGranted < badge.granted_at ? badge.granted_at : lastGranted;
       });
 
       if (badges.length === 1 || expandedBadges.includes(badges[0].badge.id)) {
-        _.each(badges, badge => expanded.push(badge));
+        badges.forEach(badge => expanded.push(badge));
         return;
       }
 
@@ -70,9 +71,8 @@ export default Ember.Controller.extend(GrantBadgeController, {
             }
           });
         },
-        function() {
-          // Failure
-          bootbox.alert(I18n.t("generic_error"));
+        function(error) {
+          popupAjaxError(error);
         }
       );
     },

@@ -190,7 +190,6 @@ te:
     choose_topic:
       none_found: "ఎటువంటి విషయాలూ కనపడలేదు."
       title:
-        search: "పేరు, యూఆర్ యల్, ఐడీ లను బట్టి విషయాన్ని వెతుకు."
         placeholder: "ఇక్కడ విషయపు శీర్షిక రాయండి"
     queue:
       approve: 'అంగీకరించు'
@@ -265,9 +264,6 @@ te:
       latest_by: "నుండి తాజా"
       toggle_ordering: "వరుస నియంత్రణను అటుఇటుచేయి"
       subcategories: "ఉప వర్గాలు"
-      topic_stat_sentence:
-        one: "%{unit} కాలంలో %{count} ఒక కొత్త టపా."
-        other: " %{unit} గతంలో %{count} కొత్త విషయాలు."
     ip_lookup:
       title: ఐపీ చిరునామా లుకప్
       hostname: అతిథిపేరు
@@ -815,7 +811,6 @@ te:
       split_topic:
         title: "కొత్త విషయానికి జరుపు"
         action: "కొత్త విషయానికి జరుపు"
-        topic_name: "కొత్త విషయపు పేరు"
         error: "టపాలను కొత్త విషయానికి జరిపేటప్పుడు దోషం తలెత్తింది"
         instructions:
           one: "మీరు కొత్త విషయం సృష్టించి దాన్ని మీరు ఈ  టపాతో నింపబోతున్నారు."
@@ -1137,9 +1132,6 @@ te:
         moderators: 'నిర్వాహకులు:'
         admins: 'అధికారులు:'
         suspended: 'సస్పెండయిన:'
-        space_free: "{{size}} ఖాలీ"
-        uploads: "ఎగుమతులు"
-        backups: "బ్యాకప్లు"
         traffic_short: "ట్రాఫిక్"
         traffic: "అనువర్తన జాల రిక్వెస్టులు"
         show_traffic_report: "సవివరణ ట్రాఫిక్ రిపోర్టు చూపు"

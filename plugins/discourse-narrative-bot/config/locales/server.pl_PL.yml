@@ -93,7 +93,6 @@ pl_PL:
         '8': "Perspektywy są dobre"
         '9': "Tak"
         '10': "Wszystkie znaki wskazują na to, że tak"
-        '11': "Odpowiedź niejasna, spróbuj ponownie"
         '12': "Spytaj ponownie później"
         '13': "Lepiej, abym Ci teraz nie mówił"
         '14': "Nie mogę teraz tego przewidzieć"
@@ -141,8 +140,6 @@ pl_PL:
     new_user_narrative:
       reset_trigger: "nowy użytkownik"
       cert_title: "W podziękowaniu za skończony samouczek"
-      hello:
-        title: ":robot: Witaj!"
       onebox:
         instructions: |-
           Następnie, czy możesz udostępnić mi jeden z poniższych linków? Odpowiedz przy użyciu **link**, a automatycznie zostanie dodane dobre podsumowanie.

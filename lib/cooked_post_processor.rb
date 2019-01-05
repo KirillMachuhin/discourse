@@ -8,6 +8,11 @@ require_dependency 'quote_comparer'
 class CookedPostProcessor
   include ActionView::Helpers::NumberHelper
 
+  INLINE_ONEBOX_LOADING_CSS_CLASS = "inline-onebox-loading"
+  INLINE_ONEBOX_CSS_CLASS = "inline-onebox"
+  LOADING_SIZE = 10
+  LOADING_COLORS = 32
+
   attr_reader :cooking_options, :doc
 
   def initialize(post, opts = {})
@@ -20,18 +25,18 @@ class CookedPostProcessor
     @cooking_options = post.cooking_options || opts[:cooking_options] || {}
     @cooking_options[:topic_id] = post.topic_id
     @cooking_options = @cooking_options.symbolize_keys
-    @cooking_options[:omit_nofollow] = true if post.omit_nofollow?
-    @cooking_options[:cook_method] = post.cook_method
 
-    analyzer = post.post_analyzer
-    @doc = Nokogiri::HTML::fragment(analyzer.cook(post.raw, @cooking_options))
-    @has_oneboxes = analyzer.found_oneboxes?
+    @doc = Nokogiri::HTML::fragment(post.cook(post.raw, @cooking_options))
+    @has_oneboxes = post.post_analyzer.found_oneboxes?
     @size_cache = {}
+
+    @disable_loading_image = !!opts[:disable_loading_image]
   end
 
   def post_process(bypass_bump = false)
     DistributedMutex.synchronize("post_process_#{@post.id}") do
       DiscourseEvent.trigger(:before_post_process_cooked, @doc, @post)
+      removed_direct_reply_full_quotes
       post_process_oneboxes
       post_process_images
       post_process_quotes
@@ -85,6 +90,29 @@ class CookedPostProcessor
     end
   end
 
+  def removed_direct_reply_full_quotes
+    return if !SiteSetting.remove_full_quote || @post.post_number == 1
+
+    num_quotes = @doc.css("aside.quote").size
+    return if num_quotes != 1
+
+    prev = Post.where('post_number < ? AND topic_id = ? AND post_type = ? AND not hidden', @post.post_number, @post.topic_id, Post.types[:regular]).order('post_number desc').limit(1).pluck(:raw).first
+    return if !prev
+
+    new_raw = @post.raw.gsub(/\A\s*\[quote[^\]]*\]\s*#{Regexp.quote(prev.strip)}\s*\[\/quote\]/, '')
+    return if @post.raw == new_raw
+
+    PostRevisor.new(@post).revise!(
+      Discourse.system_user,
+      {
+        raw: new_raw.strip,
+        edit_reason: I18n.t(:removed_direct_reply_full_quotes)
+      },
+      skip_validations: true,
+      bypass_bump: true
+    )
+  end
+
   def add_image_placeholder!(img)
     src = img["src"].sub(/^https?:/i, "")
 
@@ -111,7 +139,7 @@ class CookedPostProcessor
 
     span = create_span_node("url", url)
     a.add_child(span)
-    span.add_previous_sibling(create_icon_node("image"))
+    span.add_previous_sibling(create_icon_node("far-image"))
     span.add_next_sibling(create_span_node("help", I18n.t("upload.placeholders.too_large", max_size_kb: SiteSetting.max_image_size_kb)))
 
     # Only if the image is already linked
@@ -139,8 +167,9 @@ class CookedPostProcessor
 
   def add_broken_image_placeholder!(img)
     img.name = "span"
-    img.set_attribute("class", "broken-image fa fa-chain-broken")
+    img.set_attribute("class", "broken-image")
     img.set_attribute("title", I18n.t("post.image_placeholder.broken"))
+    img << "<svg class=\"fa d-icon d-icon-unlink svg-icon\" aria-hidden=\"true\"><use xlink:href=\"#unlink\"></use></svg>"
     img.remove_attribute("src")
     img.remove_attribute("width")
     img.remove_attribute("height")
@@ -297,19 +326,27 @@ class CookedPostProcessor
     end
 
     if upload = Upload.get_from_url(src)
-      upload.create_thumbnail!(width, height, crop)
+      upload.create_thumbnail!(width, height, crop: crop)
 
       each_responsive_ratio do |ratio|
         resized_w = (width * ratio).to_i
         resized_h = (height * ratio).to_i
 
         if upload.width && resized_w <= upload.width
-          upload.create_thumbnail!(resized_w, resized_h, crop)
+          upload.create_thumbnail!(resized_w, resized_h, crop: crop)
         end
+      end
+
+      unless @disable_loading_image
+        upload.create_thumbnail!(LOADING_SIZE, LOADING_SIZE, format: 'png', colors: LOADING_COLORS)
       end
     end
 
     add_lightbox!(img, original_width, original_height, upload, cropped: crop)
+  end
+
+  def loading_image(upload)
+    upload.thumbnail(LOADING_SIZE, LOADING_SIZE)
   end
 
   def is_a_hyperlink?(img)
@@ -373,6 +410,10 @@ class CookedPostProcessor
       else
         img["src"] = upload.url
       end
+
+      if small_upload = loading_image(upload)
+        img["data-small-upload"] = small_upload.url
+      end
     end
 
     # then, some overlay informations
@@ -380,7 +421,7 @@ class CookedPostProcessor
     img.add_next_sibling(meta)
 
     filename = get_filename(upload, img["src"])
-    informations = "#{original_width}x#{original_height}"
+    informations = "#{original_width}×#{original_height}"
     informations << " #{number_to_human_size(upload.filesize)}" if upload
 
     a["title"] = CGI.escapeHTML(img["title"] || filename)
@@ -409,7 +450,10 @@ class CookedPostProcessor
   end
 
   def create_icon_node(klass)
-    create_node("i", "fa fa-fw fa-#{klass}")
+    icon = create_node("svg", "fa d-icon d-icon-#{klass} svg-icon")
+    icon.set_attribute("aria-hidden", "true")
+    icon << "<use xlink:href=\"##{klass}\"></use>"
+
   end
 
   def create_link_node(klass, url, external = false)
@@ -433,13 +477,40 @@ class CookedPostProcessor
   end
 
   def post_process_oneboxes
-    Oneboxer.apply(@doc) do |url|
-      @has_oneboxes = true
-      Oneboxer.onebox(url,
-        invalidate_oneboxes: !!@opts[:invalidate_oneboxes],
-        user_id: @post&.user_id,
-        category_id: @post&.topic&.category_id
-      )
+    limit = SiteSetting.max_oneboxes_per_post
+    oneboxes = {}
+    inlineOneboxes = {}
+
+    Oneboxer.apply(@doc, extra_paths: [".#{INLINE_ONEBOX_LOADING_CSS_CLASS}"]) do |url, element|
+      is_onebox = element["class"] == Oneboxer::ONEBOX_CSS_CLASS
+      map = is_onebox ? oneboxes : inlineOneboxes
+      skip_onebox = limit <= 0 && !map[url]
+
+      if skip_onebox
+        if is_onebox
+          element.remove_class('onebox')
+        else
+          remove_inline_onebox_loading_class(element)
+        end
+
+        next
+      end
+
+      limit -= 1
+      map[url] = true
+
+      if is_onebox
+        @has_oneboxes = true
+
+        Oneboxer.onebox(url,
+          invalidate_oneboxes: !!@opts[:invalidate_oneboxes],
+          user_id: @post&.user_id,
+          category_id: @post&.topic&.category_id
+        )
+      else
+        process_inline_onebox(element)
+        false
+      end
     end
 
     oneboxed_images.each do |img|
@@ -458,7 +529,7 @@ class CookedPostProcessor
       end
 
       upload_id = downloaded_images[src]
-      upload = Upload.find(upload_id) if upload_id
+      upload = Upload.find_by_id(upload_id) if upload_id
       img["src"] = upload.url if upload.present?
 
       # make sure we grab dimensions for oneboxed images
@@ -576,6 +647,24 @@ class CookedPostProcessor
   end
 
   private
+
+  def process_inline_onebox(element)
+    inline_onebox = InlineOneboxer.lookup(
+      element.attributes["href"].value,
+      invalidate: !!@opts[:invalidate_oneboxes]
+    )
+
+    if title = inline_onebox&.dig(:title)
+      element.children = title
+      element.add_class(INLINE_ONEBOX_CSS_CLASS)
+    end
+
+    remove_inline_onebox_loading_class(element)
+  end
+
+  def remove_inline_onebox_loading_class(element)
+    element.remove_class(INLINE_ONEBOX_LOADING_CSS_CLASS)
+  end
 
   def is_svg?(img)
     path =

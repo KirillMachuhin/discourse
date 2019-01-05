@@ -232,7 +232,6 @@ th:
     choose_topic:
       none_found: "ไม่พบกระทู้ใดๆ"
       title:
-        search: "ค้นหากระทู้โดยชื่อ url หรือ id"
         placeholder: "ระบุชื่อกระทู้ที่นี่"
     queue:
       topic: "กระทู้:"
@@ -351,7 +350,6 @@ th:
           description: "คุณจะถูกแจ้งเตือนทุกๆโพสใหม่ในทุกๆข้อความและจำนวนใหม่จะถูกนับอละแสดง"
         watching_first_post:
           title: "ดูโพสต์แรก"
-          description: "คุณได้รับการแจ้งเตือนเกี่ยวกับโพสต์ใหม่ในกระทู้ในกลุ่มนี้"
         tracking:
           title: "ติดตาม"
           description: "คุณจะได้รับการแจ้งเตือนเมื่อใครก็ตามเอ่ยชื่อของคุณ @name หรือตอบคุณ และจำนวนของการตอบจะถูกแสดง"
@@ -393,8 +391,6 @@ th:
       latest_by: "ล่าสุดโดย"
       toggle_ordering: "เปลี่ยนวิธีการจัดลำดับ"
       subcategories: "หมวดหมู่ย่อย"
-      topic_stat_sentence:
-        other: "%{count} กระทู้ใหม่ในเวลาที่ผ่านมา %{unit}."
     ip_lookup:
       title: มองหาที่อยู่ไอพี
       hostname: ชื่อโฮสต์
@@ -850,7 +846,6 @@ th:
         title_too_long: "ชื่อเรื่องต้องไม่ยาวเกิน {{max}} ตัวอักษร"
         post_missing: "โพสไม่สามารถว่างได้"
         post_length: "โพสต้องมีอย่างน้อย {{min}} ตัวอักษร"
-        try_like: 'คุณได้ลองปุ่ม <i class="fa fa-heart"></i> หรือยัง? '
         category_missing: "คุณต้องเลือกหมวดหมู่"
       save_edit: "บันทึกการแก้ไข"
       reply_original: "ตอบบนกระทู้ต้นฉบับ"
@@ -1098,7 +1093,6 @@ th:
       split_topic:
         title: "ย้ายไปหัวข้อใหม่"
         action: "ย้ายไปหัวข้อใหม่"
-        topic_name: "ชื่อหัวข้อใหม่"
       merge_topic:
         title: "ย้ายไปหัวข้อที่มีอยู่แล้ว"
         action: "ย้ายไปหัวข้อที่มีอยู่แล้ว"
@@ -1316,9 +1310,6 @@ th:
         private_messages_short: "ข้อความ"
         private_messages_title: "ข้อความ"
         mobile_title: "โทรศัพท์"
-        space_free: "{{size}} ว่าง"
-        uploads: "อัพโหลด"
-        backups: "สำรอง"
         traffic_short: "การจราจร"
         reports:
           today: "วันนี้"
